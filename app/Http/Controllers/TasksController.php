@@ -58,18 +58,16 @@ class TasksController extends Controller
     {
         // バリデーション
         $request->validate([
-            'status' => 'required|max:10',
             'content' => 'required|max:255',
         ]);
-        
-        // メッセージを作成
-        $task = new Task;
-        $task->status = $request->status;    // 追加
-        $task->content = $request->content;
-        $task->save();
 
-        // トップページへリダイレクトさせる
-        return redirect('/');
+        // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+        ]);
+
+        // 前のURLへリダイレクトさせる
+        return back();
     }
 
     /**
@@ -140,12 +138,15 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        // idの値でメッセージを検索して取得
-        $task = Task::findOrFail($id);
-        // メッセージを削除
-        $task->delete();
+        // idの値で投稿を検索して取得
+        $task = \App\Task::findOrFail($id);
 
-        // トップページへリダイレクトさせる
-        return redirect('/');
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
+
+        // 前のURLへリダイレクトさせる
+        return back();
     }
 }
