@@ -58,16 +58,17 @@ class TasksController extends Controller
     {
         // バリデーション
         $request->validate([
+            'status' => 'required|max:10',
             'content' => 'required|max:255',
         ]);
 
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
         $request->user()->tasks()->create([
+            'status' => $request->status,
             'content' => $request->content,
         ]);
-
-        // 前のURLへリダイレクトさせる
-        return back();
+        
+        return redirect()->route('tasks.index');
     }
 
     /**

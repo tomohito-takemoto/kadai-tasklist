@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>作成ページ</h1>
+    <h2>タスクの作成</h2>
 
     <div class="row">
         <div class="col-6">
@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('content', 'タスク:') !!}
+                    {!! Form::label('content', '内容:') !!}
                     {!! Form::text('content', null, ['class' => 'form-control']) !!}
                 </div>
 
