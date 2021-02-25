@@ -139,6 +139,7 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
+        
         // idの値で投稿を検索して取得
         $task = \App\Task::findOrFail($id);
 
@@ -148,6 +149,6 @@ class TasksController extends Controller
         }
 
         // 前のURLへリダイレクトさせる
-        return back();
+        return redirect('/');
     }
 }
